@@ -4,6 +4,12 @@
 在Python开发中，仅凭Traceback信息无法得知异常发生时的变量，要修复bug就必须**重现**这个异常。这使得一些生产环境中难以复现的bug几乎**无法**被调试。  
 但有了`stack-snapshot`库，异常发生时会自动捕获整个堆栈的所有局部、全局变量，让开发者能够**精准定位异常**，极大地提升你的调试效率。  
 
+## 用途
+
+#### 与生成式AI集成
+目前，AI生成的代码可能存在不少逻辑缺陷。传统的Traceback输出不具备捕获局部变量的能力，导致依赖Traceback输出，以及日志记录实现的调试，难以精准定位某些类型的错误。  
+但`stack-snapshot`库输出的局部变量信息能精准反映错误。只需将局部变量输出信息**粘贴**到**大模型**，如ChatGPT, DeepSeek等，就能让AI生成更精准的代码。  
+
 ## 使用示例
 ```
 import stack_snapshot
@@ -135,6 +141,12 @@ def hack_exc(exc):
 `stack-snapshot` is a library that automatically captures the complete stack frames at the time of an exception, including **local and global variables**.  
 In Python development, it is often not enough to rely solely on traceback information, as it does not reveal the variable values at the time of the exception. To fix a bug, this means the exception must be **reproduced**, making some hard-to-reproduce bugs in production environments almost **impossible** to debug.  
 However, with the `stack-snapshot` library, the entire stack's local and global variables are automatically captured when an exception occurs, allowing developers to **precisely locate exceptions**, significantly enhancing debugging efficiency.
+
+## Scenarios
+
+#### Integration with Generative AI
+Currently, AI-generated code may contain various logical flaws. Traditional traceback outputs fail to capture local variable information, making it challenging to accurately identify certain types of errors when relying on traceback outputs and logging for debugging.  
+However, the local variable information provided by the `stack-snapshot` library can effectively reflect the errors. Simply **paste** the local variable output into a **large model**, such as ChatGPT or Copilot, to allow the AI to generate more precise code.  
 
 ## Usage Example
 ```python
