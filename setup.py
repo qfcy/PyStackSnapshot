@@ -9,7 +9,8 @@ sys.path.extend(site.getsitepackages()+[site.getusersitepackages()])
 import stack_snapshot
 
 if "sdist" in sys.argv[1:]:
-    if not os.path.isfile("README.rst"):
+    if not os.path.isfile("README.rst") or \
+       (os.stat("README.md").st_mtime > os.stat("README.rst").st_mtime):
         if shutil.which("pandoc"):
             cmd="pandoc -t rst -o README.rst README.md"
             print("Running pandoc:",cmd,"...")
@@ -42,5 +43,6 @@ setup(
         "Topic :: Software Development :: Testing",
         "Topic :: Software Development :: Libraries :: Python Modules"
     ],
-    install_requires=["pyobject"],
+    install_requires=["pyobject",
+                      'pydetour; python_version >= "3.12"'],
 )
