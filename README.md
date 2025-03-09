@@ -1,3 +1,7 @@
+<span class="badge-placeholder">[![Stars](https://img.shields.io/github/stars/qfcy/PyStackSnapshot)](https://img.shields.io/github/stars/qfcy/PyStackSnapshot)</span>
+<span class="badge-placeholder">[![GitHub release](https://img.shields.io/github/v/release/qfcy/PyStackSnapshot)](https://github.com/qfcy/PyStackSnapshot/releases/latest)</span>
+<span class="badge-placeholder">[![License: MIT](https://img.shields.io/github/license/qfcy/PyStackSnapshot)](https://github.com/qfcy/PyStackSnapshot/blob/main/LICENSE)</span>
+
 **The English documentation is placed below the Chinese version.**  
 
 `stack-snapshot`是一个在发生异常时，自动捕获异常发生时的完整栈帧，包括**局部、全局变量**的库。  
@@ -58,7 +62,7 @@ y        = 0
 -----------------------------------------------
 ```
 
-另外，也可以手动捕获异常，并手动输出：
+另外，还可以手动输出错误信息：
 ```python
 import stack_snapshot
 
@@ -96,7 +100,7 @@ except Exception as err:
 - `is_snapshot_enabled()`: 获取自动捕获堆栈是否启用（线程安全）。
 <br></br>
 
-- **`init(ignored=IGNORED,brief_global_var=True,maxlength=150)`**: 启用所有异常（包括标准库的异常，和继承自标准库的自定义异常类）的自动捕获堆栈，以及堆栈输出。**（推荐）**
+- **`init(ignored=IGNORED,brief_global_var=True,maxlength=150)`**: 启用所有异常（包括标准库的异常，和继承自标准库的自定义异常类）的自动捕获堆栈，以及堆栈输出。**（推荐使用）**
 
 ## 工作原理
 
@@ -192,7 +196,7 @@ y        = 0
 -----------------------------------------------
 ```
 
-Additionally, exceptions can also be manually captured and output:
+Additionally, exceptions can also be manually output:
 ```python
 import stack_snapshot
 
