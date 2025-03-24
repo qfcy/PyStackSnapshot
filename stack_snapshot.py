@@ -12,12 +12,13 @@ except ImportError:
 try:import pydetour
 except ImportError:pydetour = None
 
-__version__ = "1.0.4"
+__version__ = "1.0.4.3"
 __all__ = [
     "hack_exc","hack_all_exc","trace_stack","trace_error",
     "hook_sys_exception","reset_sys_excepthook","enable_snapshot",
     "disable_snapshot","is_snapshot_enabled","init"
 ]
+IGNORED_NAMES = ["__new__","__call__","stack_snapshot","_hooker"]
 Py_TPFLAGS_HEAPTYPE = 1 << 9 # 来自object.h
 Py_TPFLAGS_IMMUTABLETYPE = 1 << 8
 IGNORED = (BaseException,) if pydetour is None else () # TODO: 非pydetour模式下，修改BaseException.__new__会导致Cannot recover from the recursive normalization of an exception
@@ -39,9 +40,11 @@ def stack_snapshot(start=0):
     except ValueError:
         return []
 
-    result=[]
+    result=[]; skip = True
     while frame is not None:
-        result.append(frame)
+        if frame.f_code.co_name not in IGNORED_NAMES:
+            skip = False
+        if not skip:result.append(frame)
         frame = frame.f_back
     _is_taking_snapshot.value = False
     return result
@@ -77,10 +80,10 @@ def hack_exc(exc):
         # 底层的__new__方法
         new_func = cls.__new__ if pydetour else BaseException.__new__
         result = new_func(cls,*args,**kw)
-        if not getattr(result,"stack_snapshot",None): # 避免重复捕获
+        if not getattr(result,"stack_snapshot",None) and not sys.is_finalizing(): # 避免重复捕获
             # 捕获当前堆栈
             # start=2:跳过本函数和__new__的两层 (无pydetour时)
-            result.stack_snapshot = stack_snapshot(start=2 if pydetour is None else 4)
+            result.stack_snapshot = stack_snapshot(0)#start=2 if pydetour is None else 4)
         return result
 
     if pydetour is not None:
@@ -127,11 +130,22 @@ def trace_stack(err,file=None,brief_global_var=True,maxlength=MAXLENGTH):
     # 输出异常的堆栈信息
     if file is None:file = sys.stderr
 
-    if not getattr(err,"stack_snapshot",None):
+    if not getattr(err,"stack_snapshot", None):
+        tb = err.__traceback__; pre=tb
+        while tb:
+            pre=tb; tb=tb.tb_next
+        snapshot = []
+        frame = pre.tb_frame
+        while frame:
+            snapshot.append(frame)
+            frame = frame.f_back
+    else:
+        snapshot = err.stack_snapshot
+
+    if not snapshot:
         print("No stackframe information.\n", file = file)
         return
-
-    for frame in err.stack_snapshot:
+    for frame in snapshot:
         if frame.f_locals is not frame.f_globals: # 如果局部变量和全局变量不同（不是模块根部）
             print(f"""Local variables of {frame.f_code.co_name} \
 ({os.path.split(frame.f_code.co_filename)[-1]}):""", file = file)

@@ -4,7 +4,7 @@
 
 **The English documentation is placed below the Chinese version.**  
 
-`stack-snapshot`是一个在发生异常时，自动捕获异常发生时的完整栈帧，包括**局部、全局变量**的库。  
+`stack-snapshot`是一个在发生异常时，自动捕获异常发生时的完整栈帧，包括**局部、全局变量**的库，可通过`pip install stack-snapshot`安装。  
 在Python开发中，仅凭Traceback信息无法得知异常发生时的变量，要修复bug就必须**重现**这个异常。这使得一些生产环境中难以复现的bug几乎**无法**被调试。  
 但有了`stack-snapshot`库，异常发生时会自动捕获整个堆栈的所有局部、全局变量，让开发者能够**精准定位异常**，极大地提升你的调试效率。  
 
@@ -138,7 +138,7 @@ def hack_exc(exc):
 
 ---
 
-`stack-snapshot` is a library that automatically captures the complete stack frames at the time of an exception, including **local and global variables**.  
+`stack-snapshot` is a library that automatically captures the complete stack frames at the time of an exception, including **local and global variables**, which can be installed by `pip install stack-snapshot`.  
 In Python development, it is often not enough to rely solely on traceback information, as it does not reveal the variable values at the time of the exception. To fix a bug, this means the exception must be **reproduced**, making some hard-to-reproduce bugs in production environments almost **impossible** to debug.  
 However, with the `stack-snapshot` library, the entire stack's local and global variables are automatically captured when an exception occurs, allowing developers to **precisely locate exceptions**, significantly enhancing debugging efficiency.
 
