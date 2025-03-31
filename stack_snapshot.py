@@ -6,7 +6,7 @@ import sys,os,threading,traceback,weakref,atexit
 from collections import deque
 from types import FunctionType,ModuleType,BuiltinFunctionType
 try:
-    from pyobject import get_type_flag,set_type_flag,_shortrepr
+    from pyobject import get_type_flag,set_type_flag,shortrepr
 except ImportError:
     if "setup.py" not in sys.argv[0].lower():raise # 仅在setup.py导入本模块时，忽略错误
 try:import pydetour
@@ -124,7 +124,7 @@ def _pprint_dict(dct, file=None, do_ignore=False, maxlen=MAXLENGTH):
     items.sort()
     length = min(len(max(items, key = len)), MAX_VARIABLE_LEN)
     for item in items:
-        print(f"{item: <{length}} = {_shortrepr(dct[item], maxlen)}", file = file)
+        print(f"{item: <{length}} = {shortrepr(dct[item], maxlen)}", file = file)
 
 def trace_stack(err,file=None,brief_global_var=True,maxlength=MAXLENGTH):
     # 输出异常的堆栈信息
